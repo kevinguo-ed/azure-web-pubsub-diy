@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./dist/output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100;300;400&family=PT+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <title>Azure Web PubSub | Demo for auction scenario</title>
+  </head>
+  <body class="font-display">
+    <!-- Overlay form to bid -->
+    <div
+      class="fixed flex hidden h-screen w-screen items-center justify-center bg-slate-700 bg-opacity-30"
+      id="overlay-place_bid"
+    >
+      <div
+        class="min-w-[450px] rounded-md bg-white py-6 px-10"
+        id="post-bid"
+      >
+        <header class="mb-5 flex items-center justify-between">
+          <h1 class="font-accent text-2xl">Enter your bid</h1>
+          <img
+            alt="close"
+            src="./assets/x.svg"
+            class="cursor-pointer p-2 hover:bg-gray-100"
+            id="btn-close_bid_overlay"
+          />
+        </header>
+
+        <div class="flex flex-col pb-4">
+          <label class="py-1 text-xs" name="new bid" for="new-bid"
+            >New bid</label
+          >
+          <input
+            placeholder="20,000"
+            id="new-bid" name="bid"
+            class="border-b border-gray-600 py-2 px-2 text-sm font-light"
+          />
+        </div>
+        <p id="error"></p>
+        <button
+          class="w-full rounded-sm bg-slate-800 py-4 text-sm text-gray-100"
+          id="btn-place_bid"
+        >
+          Place bid
+        </button>
+      </div>
+    </div>
+
+    <!-- Site navigation -->
+    <header class="flex items-center justify-between py-5 px-4 shadow-md">
+      <img alt="logo of Sotheby's" src="./assets/sothebys-logo.svg" />
+      <nav>
+        <ul class="flex flex-1 justify-around gap-10 text-sm font-bold">
+          <li>AUCTIONS</li>
+          <li>BUY NOW</li>
+          <li>PRIVATE SALES</li>
+          <li>SELL</li>
+        </ul>
+      </nav>
+      <div class="flex items-center gap-3">
+        <form class="flex items-center rounded-sm border pr-4">
+          <input
+            type="search"
+            placeholder="Search Sotheby's"
+            class="py-2 px-4 text-sm font-light"
+          />
+          <img
+            src="./assets/magnifying_glass.svg"
+            alt="icon of a magnifying glass"
+            class="h-4 w-4"
+          />
+        </form>
+        <div>
+          <img src="./assets/shopping_bag.svg" alt="icon of a shopping bag" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Page navigation -->
+    <nav class="flex items-center justify-between border-b py-3 px-10">
+      <div>
+        <span class="text-sm font-light text-gray-600"
+          >Contemporary Curated</span
+        >
+        <span class="px-2 text-sm font-light text-gray-600">/</span>
+        <span class="font-light text-gray-700"> Lot 18</span>
+      </div>
+      <div class="flex items-center gap-7">
+        <img alt="chevron arrow pointing left" src="./assets/chevron.svg" />
+        <button class="rounded-full border px-4 py-1 text-sm font-light">
+          Lot 18
+        </button>
+        <img
+          alt="chevron arrow pointing left"
+          src="./assets/chevron.svg"
+          class="rotate-180"
+        />
+      </div>
+    </nav>
+
+    <!-- Lot details -->
+    <main class="flex gap-14 px-14">
+      <img
+        alt="The palm reader by Salmon Toor"
+        src="./assets/salmon-toor_the-palm-reader.jpg"
+        class="max-w-[500px]"
+      />
+      <div class="mt-5 flex-1">
+        <div class="flex justify-end gap-4">
+          <!-- actions -->
+          <div class="flex items-center justify-center gap-2">
+            <img alt="US flag" src="./assets/usa.png" class="h-6 w-6" />
+            <span class="text-sm">USD</span>
+          </div>
+          <img alt="heart icon" src="./assets/heart.svg" />
+          <img alt="printer icon" src="./assets/printer.svg" />
+        </div>
+        <div class="mt-16">
+          <h1 class="py-2 font-accent text-2xl">Salmon Toor</h1>
+          <p class="text-sm font-light text-gray-500">The Palm Reader</p>
+
+          <div class="mt-10 flex flex-col items-start gap-5">
+            <div class="w-full">
+              <h2 class="text-xs">Sessions begins in</h2>
+              <p class="border-b border-gray-600 py-2 text-sm font-light">
+                <span class="font-bold">TIME</span> • March 15, 11:00 PM CST
+              </p>
+            </div>
+
+            <div class="w-full">
+              <h2 class="text-xs">Estimate</h2>
+              <p class="border-b border-gray-600 py-2 text-sm font-light">
+                200,000 - 300,000 USD
+              </p>
+            </div>
+
+            <div class="w-full">
+              <h2 class="text-xs">Bid</h2>
+              <p class="border-b border-gray-600 py-2 font-bold">
+                <span id="bid-current">180,000</span> <span>USD</span>
+              </p>
+            </div>
+            <button
+              class="w-full rounded-sm bg-slate-800 py-4 text-sm text-gray-100"
+              id="btn-bid"
+            >
+              Bid
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
