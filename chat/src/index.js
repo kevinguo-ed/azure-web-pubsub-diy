@@ -51,6 +51,7 @@ new Vue({
 function addItem(item, owner) {
   item.id = owner.length;
   owner.push(item);
-  window.scrollTo(0, document.body.scrollHeight);
+  
+  const chat = document.getElementById("chat-container");
+  chat.scrollTop = chat.scrollHeight;
 }
-

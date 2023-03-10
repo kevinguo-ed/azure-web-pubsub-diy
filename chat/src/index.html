@@ -94,7 +94,7 @@
                             :disabled="!userId || connected">Connect</button>
                     </div>
                 </form>
-                <div class="bg-light chat" v-bind:scrollTop="$attrs.scrollHeight">
+                <div class="bg-light chat" id="chat-container" v-bind:scrollTop="$attrs.scrollHeight">
                     <div class="m-2" v-for="message in chat" v-bind:key="message.id">
                         <div class="col-md row" style="display: inline-block;">
                             <div v-if="message.type =='system'"
