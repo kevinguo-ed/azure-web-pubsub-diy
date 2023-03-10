@@ -4,14 +4,12 @@ const data = {
   client: {
     endpoint: '',
     connection: null,
-    id: 1,
     newMessage: '',
     chat: { messages: [] },
     connected: false,
     logs: [],
     userId: null,
     connectionId: null,
-    ackId: 0,
   },
 };
 
@@ -20,11 +18,6 @@ new Vue({
   data: data,
   methods: {
     connect: async function () {
-      // close the previous connection if any and start a new connection
-      if (this.client.connection) {
-        this.client.connection.stop();
-        addItem(`${this.client.userId}:${this.client.connectionId} disconnected.`, this.client.logs);
-      }
       let client = this.client.connection = new WebPubSubClient({
         getClientAccessUrl: async _ => {
           let value = await (await fetch(`/negotiate?id=${this.client.endpoint}`)).json();
@@ -33,7 +26,7 @@ new Vue({
       });
 
       client.on("connected", (e) => {
-        console.log(`Connected: ${JSON.stringify(e)}.`);
+        console.log(`Connected: ${e.connectionId}.`);
         this.client.connected = true;
         this.client.userId = e.userId;
         this.client.connectionId = e.connectionId;
@@ -45,24 +38,20 @@ new Vue({
 
       client.on("group-message", (e) => {
           let data = e.message.data;
-          console.log(data);
-          if (client.userId && data.from === client.userId)
-            addItem({ type: "self", content: data.message }, client.chat.messages);
-          else
-            addItem({ from: data.from, content: data.message }, client.chat.messages);
-        }
-      );
+          addItem({ from: data.from, content: data.message }, this.client.chat.messages);
+      });
 
       await client.start();
       await client.joinGroup("chatgroup");
     },
     send: function (client) {
       client.connection.sendToGroup("chatgroup",
-        {
-          from: client.userId,
-          message: client.newMessage
-        }
-        , "json");
+      {
+        from: client.userId,
+        message: client.newMessage
+      },
+      "json", {noEcho: true});
+      addItem({ type: "self", content: client.newMessage }, this.client.chat.messages);
       client.newMessage = '';
     }
   }
