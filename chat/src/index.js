@@ -37,20 +37,18 @@ new Vue({
       });
 
       client.on("group-message", (e) => {
-          let data = e.message.data;
-          addItem({ from: data.from, content: data.message }, this.client.chat.messages);
+        let data = e.message.data;
+        addItem({ from: data.from, content: data.message }, this.client.chat.messages);
       });
 
       await client.start();
       await client.joinGroup("chatgroup");
     },
     send: function (client) {
-      client.connection.sendToGroup("chatgroup",
-      {
+      client.connection.sendToGroup("chatgroup", {
         from: client.userId,
         message: client.newMessage
-      },
-      "json", {noEcho: true});
+      }, "json", { noEcho: true });
       addItem({ type: "self", content: client.newMessage }, this.client.chat.messages);
       client.newMessage = '';
     }
