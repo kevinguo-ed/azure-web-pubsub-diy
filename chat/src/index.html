@@ -71,7 +71,7 @@
             <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Client-side WebSocket Chat</a>
             <div class="m-3">
                 <span class="text-light">Welcome </span>
-                <template v-if="client.connected">
+                <template v-if="connected">
                     <svg width="16" height="16">
                         <circle cx="8" cy="8" r="8" fill="#168c46" />
                     </svg>
@@ -86,16 +86,16 @@
 
         <main role="main" class="col p-md-4 p-2">
             <div class="d-flex flex-column flex-nowrap p-2">
-                <form v-on:submit.prevent="connect(client)" class="py-2">
+                <form v-on:submit.prevent="connect()" class="py-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" v-model="client.endpoint" id="endpointInput"
+                        <input :disable="connected" type="text" class="form-control" v-model="userId" id="endpointInput"
                             aria-describedby="endpointHelp" placeholder="Type Your User Name Here">
                         <button type="submit" class="btn btn-primary" style="width: 100px;"
-                            :disabled="!client.endpoint">Connect</button>
+                            :disabled="!userId || connected">Connect</button>
                     </div>
                 </form>
                 <div class="bg-light chat" v-bind:scrollTop="$attrs.scrollHeight">
-                    <div class="m-2" v-for="message in client.chat.messages" v-bind:key="message.id">
+                    <div class="m-2" v-for="message in chat" v-bind:key="message.id">
                         <div class="col-md row" style="display: inline-block;">
                             <div v-if="message.type =='system'"
                                 class="font-italic text-info text-center font-weight-light" role="alert">
@@ -117,21 +117,14 @@
                 </div>
                 <div>
                     <br />
-                    <form v-on:submit.prevent="send(client)">
+                    <form v-on:submit.prevent="send()">
                         <div class="input-group">
-                            <input type="text" v-model="client.newMessage" class="form-control"
+                            <input type="text" v-model="newMessage" class="form-control"
                                 placeholder="Send a message">
                             <button type="submit" class="btn btn-outline-secondary" style="width: 100px;"
-                                :disabled="!client.newMessage || !client.connected">Send</button>
+                                :disabled="!newMessage || !connected">Send</button>
                         </div>
                     </form>
-                </div>
-                <div style="background-color: black; color: blanchedalmond; height: 100px; overflow: auto;">
-                    <ul>
-                        <li v-for="l in client.logs.slice().reverse()" :key="l.id">
-                            {{ l }}
-                        </li>
-                    </ul>
                 </div>
             </div>
         </main>
