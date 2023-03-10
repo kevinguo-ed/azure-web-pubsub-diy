@@ -13,6 +13,9 @@ module.exports = {
     extensions: [".ts", ".js"],
     fallback: {
       "events": require.resolve("events/")
+    },
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
     }
   },
   plugins: [
