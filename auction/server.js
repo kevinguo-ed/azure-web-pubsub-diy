@@ -9,9 +9,13 @@ app.listen(port, () => console.log(`Open http://localhost:${port}/index.html`));
 let serviceClient = new WebPubSubServiceClient(process.env.ConnectionString, "auction");
 app.get("/negotiate", async (req, res) => {
     let token = await serviceClient.getClientAccessToken();
-    res.send(token.url);
+    
+    res.json({
+        url: token.url
+    });
 });
-app.get("/get-current-bid", async (req, res) => {
+
+app.get("/currentBid", async (req, res) => {
     res.send(200, currentBid);
 })
 app.post('/bid', async (req, res) => {
