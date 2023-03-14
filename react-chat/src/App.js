@@ -47,8 +47,7 @@ function App() {
       message: message,
     };
     await client.sendToGroup("chat", chat, "json", { noEcho: true });
-    const current = [...chats, chat];
-    setChats((prev) => [...prev, current]);
+    setChats((prev) => [...prev, chat]);
   }
 
   const loginPage = (
@@ -77,6 +76,15 @@ function App() {
   );
   const messagePage = (
     <div className="h-100 container">
+      <div className="chats d-flex flex-column m-2 p-2 bg-light h-100 overflow-">
+        {chats.map((item, index) =>
+          item.from === user ? (
+            <SelfChat key={index} message={item.message} />
+          ) : (
+            <UserChat key={index} from={item.from} message={item.message} />
+          )
+        )}
+      </div>
       <div className="input-group m-3">
         <input
           type="text"
@@ -90,15 +98,6 @@ function App() {
             Send
           </button>
         </div>
-      </div>
-      <div className="chats d-flex flex-column m-2 p-2 bg-light h-100 overflow-">
-        {chats.map((item, index) =>
-          item.from === user ? (
-            <SelfChat key={index} message={item.message} />
-          ) : (
-            <UserChat key={index} from={item.from} message={item.message} />
-          )
-        )}
       </div>
     </div>
   );
