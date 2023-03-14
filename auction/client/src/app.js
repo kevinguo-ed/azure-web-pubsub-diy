@@ -1,28 +1,9 @@
-import { WebPubSubClient } from "@azure/web-pubsub-client";
-
 const bidButton = document.querySelector("#btn-bid");
 const currentBid = document.querySelector("#bid-current");
 const newBidButton = document.querySelector("#btn-place_bid");
 // Overlay elements
 const bidOverlay = document.querySelector("#overlay-place_bid");
 const closeOverlayButton = document.querySelector("#btn-close_bid_overlay");
-
-async function negotiate() {
-  const response = await fetch(`/negotiate`);
-  return (await response.json()).url;
-}
-
-(async function connect() {
-  const client = new WebPubSubClient({
-    getClientAccessUrl: negotiate,
-  });
-
-  client.on("server-message", (e) => {
-    setCurrentBid(e.message.data.currentBid);
-  });
-
-  await client.start();
-})();
 
 bidButton.addEventListener("click", () => {
   bidOverlay.classList.toggle("hidden");
