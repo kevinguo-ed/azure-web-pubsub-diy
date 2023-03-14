@@ -19,6 +19,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const [connected, setConnected] = useState(false);
+  const [client, setClient] = useState(null);
 
   function connect() {
     setConnected(true);
@@ -29,7 +30,11 @@ function App() {
       from: user,
       message: message,
     };
-    setChats((prev) => [...prev, chat]);
+    appendMessage(chat);
+  }
+
+  function appendMessage(data) {
+    setChats((prev) => [...prev, data]);
   }
 
   const loginPage = (
