@@ -8,11 +8,8 @@ app.use(express.static('public'));
 app.listen(port, () => console.log(`Open http://localhost:${port}/index.html`));
 let serviceClient = new WebPubSubServiceClient(process.env.ConnectionString, "auction");
 app.get("/negotiate", async (req, res) => {
-    let token = await serviceClient.getClientAccessToken();
-    
-    res.json({
-        url: token.url
-    });
+    const token = await service.getClientAccessToken();
+    res.status(200).send(token.url);
 });
 
 app.get("/currentBid", async (req, res) => {
