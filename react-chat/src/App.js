@@ -22,18 +22,13 @@ function App() {
   const [connected, setConnected] = useState(false);
   const [client, setClient] = useState(null);
 
-  async function negotiate() {
-    const response = await fetch(`/negotiate?id=${user}`);
-    return (await response.json()).url;
-  }
-
   async function connect() {
     const client = new WebPubSubClient({
-      getClientAccessUrl: negotiate,
+      getClientAccessUrl: async() => (await fetch("/negotiate")).text(),
     });
     client.on("group-message", (e) => {
       const data = e.message.data;
-      setChats((prev) => [...prev, data]);
+      appendMessage(data);
     });
     await client.start();
     await client.joinGroup("chat");
@@ -47,7 +42,11 @@ function App() {
       message: message,
     };
     await client.sendToGroup("chat", chat, "json", { noEcho: true });
-    setChats((prev) => [...prev, chat]);
+    appendMessage(chat);
+  }
+
+  function appendMessage(data) {
+    setChats((prev) => [...prev, data]);
   }
 
   const loginPage = (

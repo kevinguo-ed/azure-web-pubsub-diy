@@ -7,14 +7,9 @@ const newBidButton = document.querySelector("#btn-place_bid");
 const bidOverlay = document.querySelector("#overlay-place_bid");
 const closeOverlayButton = document.querySelector("#btn-close_bid_overlay");
 
-async function negotiate() {
-  const response = await fetch(`/negotiate`);
-  return (await response.json()).url;
-}
-
-(async function connect() {
+async function connect() {
   const client = new WebPubSubClient({
-    getClientAccessUrl: negotiate,
+    getClientAccessUrl: async () => (await fetch("/negotiate")).text(),
   });
 
   client.on("server-message", (e) => {
@@ -22,7 +17,9 @@ async function negotiate() {
   });
 
   await client.start();
-})();
+}
+
+connect();
 
 bidButton.addEventListener("click", () => {
   bidOverlay.classList.toggle("hidden");
